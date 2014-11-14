@@ -16,17 +16,17 @@ class Server: NSManagedObject {
     class func createServer(viewController :LoginViewController, withDomain domain: String, UsingUsername username : String, AndPassword password : String) -> Bool {
         viewController.errorField.text = ""
         if(viewController.serverURLField.text != "" && viewController.usernameField.text != "" && viewController.passwordField.text != "") {
-            let fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
-            let fetchPredicate : NSPredicate = NSPredicate(format: "domain == %@",  viewController.serverURLField.text)!
+            var fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
+            var fetchPredicate : NSPredicate = NSPredicate(format: "domain == %@",  viewController.serverURLField.text)!
             fetchRequest.predicate = fetchPredicate
             var error: NSError? = nil
-            let results = viewController.managedObjectContext!.executeFetchRequest(fetchRequest, error:&error) as [Server]
+            var results = viewController.managedObjectContext!.executeFetchRequest(fetchRequest, error:&error) as [Server]
             if(error == nil) {
                 if(results.count > 0) {
                     viewController.errorField.text = "Error: server already exists"
                     return false
                 } else {
-                    let newItem : Server = NSEntityDescription.insertNewObjectForEntityForName(Constants.serverItemIdentifier, inManagedObjectContext: viewController.managedObjectContext!) as Server
+                    var newItem : Server = NSEntityDescription.insertNewObjectForEntityForName(Constants.serverItemIdentifier, inManagedObjectContext: viewController.managedObjectContext!) as Server
                     newItem.domain = viewController.serverURLField.text
                     var error2 : NSError? = nil
                     if(viewController.managedObjectContext?.hasChanges == true && viewController.managedObjectContext?.save(&error2) == false) {
@@ -51,14 +51,14 @@ class Server: NSManagedObject {
     class func editServer(viewController :LoginViewController, withDomain domain: String, UsingUsername username : String, AndPassword password : String) -> Bool{
         viewController.errorField.text = ""
         if(viewController.serverURLField.text != "" && viewController.usernameField.text != "" && viewController.passwordField.text != "") {
-            let fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
-            let fetchPredicate : NSPredicate = NSPredicate(format:"domain == %@", viewController.serverURLField.text)!
+            var fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
+            var fetchPredicate : NSPredicate = NSPredicate(format:"domain == %@", viewController.serverURLField.text)!
             fetchRequest.predicate = fetchPredicate
             var error: NSError? = nil
             
-            let results = viewController.managedObjectContext!.executeFetchRequest(fetchRequest, error:&error)
+            var results = viewController.managedObjectContext!.executeFetchRequest(fetchRequest, error:&error)
             if(results?.count > 0) {
-                let server : Server = results?.first as Server
+                var server : Server = results?.first as Server
                 server.domain = viewController.serverURLField.text
                 var error2 : NSError? = nil
                 if(viewController.managedObjectContext?.hasChanges == true && viewController.managedObjectContext?.save(&error2) == false) {
@@ -81,14 +81,14 @@ class Server: NSManagedObject {
     class func deleteServer(viewController :LoginViewController, withDomain domain: String) {
         viewController.errorField.text = ""
         if(viewController.serverURLField.text != "") {
-            let fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
-            let fetchPredicate : NSPredicate = NSPredicate(format:"domain == %@", viewController.serverURLField.text)!
+            var fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
+            var fetchPredicate : NSPredicate = NSPredicate(format:"domain == %@", viewController.serverURLField.text)!
             fetchRequest.predicate = fetchPredicate
             var error: NSError? = nil
             
-            let results = viewController.managedObjectContext!.executeFetchRequest(fetchRequest, error:&error)
+            var results = viewController.managedObjectContext!.executeFetchRequest(fetchRequest, error:&error)
             if(results?.count > 0) {
-                let server : Server = results?.first as Server
+                var server : Server = results?.first as Server
                 viewController.managedObjectContext?.deleteObject(server)
                 var error2 : NSError? = nil
                 if(viewController.managedObjectContext?.hasChanges == true && viewController.managedObjectContext?.save(&error2) == false) {

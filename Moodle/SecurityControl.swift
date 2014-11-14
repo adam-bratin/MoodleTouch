@@ -63,7 +63,7 @@ class SecurityControl: NSObject {
         query[kSecMatchLimit as String] = kSecMatchLimitOne
         var dataTypeRef : Unmanaged<AnyObject>?
         var status: OSStatus = SecItemCopyMatching(query, &dataTypeRef)
-        let opaque = dataTypeRef?.toOpaque()
+        var opaque = dataTypeRef?.toOpaque()
         var credentials: NSDictionary?
         if let opaque = opaque {
             var data = Unmanaged<NSDictionary>.fromOpaque(opaque).takeUnretainedValue()
@@ -111,7 +111,7 @@ class SecurityControl: NSObject {
         var keychainQuery = NSMutableDictionary()
         keychainQuery[kSecClass as String] = secClass
         
-        let result:OSStatus = SecItemDelete(keychainQuery)
+        var result:OSStatus = SecItemDelete(keychainQuery)
         if (result == errSecSuccess) {
             return true
         } else {
@@ -121,21 +121,71 @@ class SecurityControl: NSObject {
     
     class func evaluateTouch(viewController : webViewController, withDomain domain : String) {
 //        var credentials : Dictionary<String,String>
-        var touchIDContext = LAContext()
-        var touchIDError : NSError?
-        var reasonString = "I need to see if it's really you"
-        if (touchIDContext.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error:&touchIDError)) {
-            touchIDContext.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: {
-                (success: Bool, error: NSError?) -> Void in
-                if success {
-                        viewController.creds = SecurityControl.loadItem(domain)
-                } else {
-                    viewController.creds = Dictionary<String, String>()
+        let highPriorityQueue : dispatch_queue_t = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1), highPriorityQueue, {
+            viewController.startTouchID = true
+            let touchIDContext = LAContext()
+            var touchIDError : NSError?
+            var reasonString = "I need to see if it's really you"
+            if (touchIDContext.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &touchIDError)) {
+                touchIDContext .evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success: Bool, evalPolicyError: NSError?) -> Void in
+                    if success {
+                            viewController.creds = SecurityControl.loadItem(domain)
+                    } else {
+                        viewController.creds = Dictionary<String, String>()
+                        println(evalPolicyError?.localizedDescription)
+                        
+                        switch evalPolicyError!.code {
+                            
+                        case LAError.SystemCancel.rawValue:
+                            println("Authentication was cancelled by the system")
+                            
+                        case LAError.UserCancel.rawValue:
+                            println("Authentication was cancelled by the user")
+                            
+                        case LAError.UserFallback.rawValue:
+                            println("User selected to enter custom password")
+                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                                SecurityControl.showPasswordAlert(viewController)
+                            })
+                            
+                        default:
+                            println("Authentication failed")
+                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                                SecurityControl.showPasswordAlert(viewController)
+                            })
+                        }
+                    }
+                })
+            } else {
+                viewController.creds = Dictionary<String, String>()
+                // If the security policy cannot be evaluated then show a short message depending on the error.
+                switch touchIDError!.code{
+                    
+                case LAError.TouchIDNotEnrolled.rawValue:
+                    println("TouchID is not enrolled")
+                    
+                case LAError.PasscodeNotSet.rawValue:
+                    println("A passcode has not been set")
+                    
+                default:
+                    // The LAError.TouchIDNotAvailable case.
+                    println("TouchID not available")
                 }
-            })
-        } else {
-            viewController.creds = Dictionary<String, String>()
-        }
-        viewController.loadPage()
+                
+                // Optionally the error description can be displayed on the console.
+                println(touchIDError?.localizedDescription)
+                
+                // Show the custom alert view to allow users to enter the password.
+                SecurityControl.showPasswordAlert(viewController)
+            }
+            viewController.loadPage()
+        })
+    }
+    
+    class func showPasswordAlert(viewController : webViewController) {
+        var passwordAlert : UIAlertView = UIAlertView(title: "TouchIDDemo", message: "Please type your password", delegate: viewController, cancelButtonTitle: "Cancel", otherButtonTitles: "Okay")
+        passwordAlert.alertViewStyle = UIAlertViewStyle.SecureTextInput
+        passwordAlert.show()
     }
 }

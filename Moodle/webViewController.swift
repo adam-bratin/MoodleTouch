@@ -9,9 +9,10 @@
 import UIKit
 import WebKit
 
-class webViewController: UIViewController, WKNavigationDelegate, NSURLConnectionDelegate {
+class webViewController: UIViewController, WKNavigationDelegate, NSURLConnectionDelegate, UIAlertViewDelegate {
     var domain : String = ""
     var creds : Dictionary<String,String> = Dictionary<String,String>()
+    var startTouchID : Bool = false
     @IBOutlet var webView : WKWebView!
     
 //    init(domainNew: String) {
@@ -25,8 +26,10 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
         SecurityControl.evaluateTouch(self, withDomain: self.domain)
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -42,18 +45,18 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
             var source : String = "document.getElementById(username).set(\"value\",\(username)); \n"
             source += "document.getElementById(password).set(\"value\",\(password)); \n"
             source += "document.getElementById(fm1).submit(); \n"
-            let userScript = WKUserScript(source: source, injectionTime: .AtDocumentEnd, forMainFrameOnly: true)
+            var userScript = WKUserScript(source: source, injectionTime: .AtDocumentEnd, forMainFrameOnly: true)
             
-            let userContentController = WKUserContentController()
+            var userContentController = WKUserContentController()
             userContentController.addUserScript(userScript)
             
-            let configuration = WKWebViewConfiguration()
+            var configuration = WKWebViewConfiguration()
             configuration.userContentController = userContentController
             self.webView = WKWebView(frame:view.frame, configuration: WKWebViewConfiguration())
             webView.navigationDelegate = self;
             view.addSubview(webView)
-            let url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
-            let request :NSURLRequest! = NSURLRequest(URL: url)
+            var url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
+            var request :NSURLRequest! = NSURLRequest(URL: url)
             webView.loadRequest(request)
         } else {
             SecurityControl.evaluateTouch(self, withDomain: domain)
