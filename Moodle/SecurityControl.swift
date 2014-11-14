@@ -9,45 +9,53 @@
 import UIKit
 import Security
 import LocalAuthentication
+import Foundation
 
 class SecurityControl: NSObject {
     class func addItem(domain : String, withUsername username : String, usingPassword password: String) -> Bool {
         
-        let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
-            kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, .UserPresence, nil)
+//        let query : [String: AnyObject] = [
+//            kSecClass             : kSecClassInternetPassword,
+//            kSecAttrServer       : domain,
+//            kSecAttrAccount       : username,
+//            kSecValueData         : password,
+//            kSecAttrAccessible : kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+//        ]
+        var query: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPassword, domain, username, password, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly], forKeys: [kSecClass, kSecAttrServer, kSecAttrAccount, kSecValueData, kSecAttrAccessible])
+        let dataTypeRef : UnsafeMutablePointer<Unmanaged<AnyObject>?> = nil
+        let status: OSStatus = SecItemAdd(query as CFDictionaryRef, dataTypeRef)
         
-        let query = [
-            kSecClass as String : kSecClassGenericPassword as String,
-            kSecAttrService as String : domain,
-            kSecAttrAccount as String : username,
-            kSecValueData as String : password,
-            kSecAttrAccessControl as String : accessControl.takeUnretainedValue()]
+        println("Status Add: \(dataTypeRef)")
+        println(errSecSuccess)
+        println(noErr)
         
-        SecItemDelete(query as CFDictionaryRef)
-        
-        let status: OSStatus = SecItemAdd(query as CFDictionaryRef, nil)
-        
-        return status == noErr
+        return status == errSecSuccess
     }
     
     class func updateItem(domain : String, withUsername username : String, usingPassword password : String) -> Bool {
 
         let query = [
-            kSecClass as String : kSecClassGenericPassword as String,
+            kSecClass as String : kSecClassGenericPassword,
             kSecAttrService : domain,
             kSecUseOperationPrompt as String : Constants.updateKeychainPrompt]
+
         let changes = [
             kSecAttrAccount as String : username,
             kSecValueData as String : password]
+        
         let status: OSStatus = SecItemUpdate(query as CFDictionaryRef, changes as CFDictionaryRef)
+        
+        println("Status Update: \(status)")
+        
         return status == noErr
     }
     
     class func deleteItem(domain : String) -> Bool {
         let query = [
-            kSecClass as String : kSecClassGenericPassword as String,
+            kSecClass as String : kSecClassGenericPassword,
             kSecAttrService : domain]
         let status: OSStatus = SecItemDelete(query as CFDictionaryRef)
+        println("Status Add: \(status)")
         return status == noErr
         
     }
@@ -58,23 +66,26 @@ class SecurityControl: NSObject {
     
     class func loadItem(domain : String) -> NSDictionary? {
         let query = [
-            kSecClass as String : kSecClassGenericPassword as String,
+            kSecClass as String : kSecClassGenericPassword,
             kSecAttrService as String : domain,
-            kSecReturnData as String : true,
+            kSecReturnAttributes as String : true,
             kSecMatchLimit as String : kSecMatchLimitOne,
             kSecUseOperationPrompt as String : "Authenticate to retrieve your username/password!"
         ]
 
         var dataTypeRef :Unmanaged<AnyObject>?
-
         let status: OSStatus = SecItemCopyMatching(query, &dataTypeRef)
+        let opaque = dataTypeRef?.toOpaque()
+        var credentials: NSDictionary?
+        println("Status load: \(status)")
         if status == noErr {
-            let data = dataTypeRef!.takeRetainedValue() as NSData
-            let result = NSKeyedUnarchiver.unarchiveObjectWithData(data) as NSDictionary
-            return result
-        } else {
-            return nil
+            println("HERE")
+            let data = Unmanaged<NSData>.fromOpaque(opaque!).takeUnretainedValue() as NSData
+            
+            // Convert the data retrieved from the keychain into a string
+            credentials = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? NSDictionary
         }
+        return credentials
     }
     
     class func resetKeychain() -> Bool {
@@ -108,7 +119,7 @@ class SecurityControl: NSObject {
                     
                     if success {
                         credentials = SecurityControl.loadItem(domain)
-                        println(credentials)
+                        println("Credentials: \(credentials)")
                     } else {
                         credentials = nil
                     }

@@ -33,17 +33,34 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if(sender as UIButton == self.deleteButton) {
             Server.deleteServer(self, withDomain: self.serverURLField.text)
         } else {
-            Server.createServer(self, withDomain: self.serverURLField.text, UsingUsername: self.usernameField.text, AndPassword: self.passwordField.text)
             if(self.passwordField.text == self.confirmPasswordField.text) {
                 if(sender as UIButton == self.createButton) {
-                    Server.createServer(self, withDomain: self.serverURLField.text, UsingUsername: self.usernameField.text, AndPassword: self.passwordField.text)
+                    if(Server.createServer(self, withDomain: self.serverURLField.text, UsingUsername: self.usernameField.text, AndPassword: self.passwordField.text)) {
+                        if(SecurityControl.addItem(self.serverURLField.text, withUsername: self.usernameField.text, usingPassword: self.passwordField.text)) {
+                            createAlert("Success", message: "You added server to saved list")
+                        } else {
+                            Server.deleteServer(self, withDomain: self.serverURLField.text)
+                        }
+                    }
                 } else if(sender as UIButton == self.editButton) {
-                    Server.createServer(self, withDomain: self.serverURLField.text, UsingUsername: self.usernameField.text, AndPassword: self.passwordField.text)
+                    if(Server.editServer(self, withDomain: self.serverURLField.text, UsingUsername: self.usernameField.text, AndPassword: self.passwordField.text)) {
+                        if(SecurityControl.updateItem(self.serverURLField.text, withUsername: self.usernameField.text, usingPassword: self.passwordField.text)) {
+                            createAlert("Success", message: "You updated server to saved list")
+                        } else {
+                            Server.deleteServer(self, withDomain: self.serverURLField.text)
+                        }
+                    }
                 }
             } else {
                 self.errorField.text = "Error: your confirm password doesn't match"
             }
         }
+    }
+    
+    func createAlert(title :String, message : String) {
+        var alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -64,6 +81,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.serverURLField.resignFirstResponder()
         self.usernameField.resignFirstResponder()
         self.passwordField.resignFirstResponder()
+        self.confirmPasswordField.resignFirstResponder()
     }
 }
 

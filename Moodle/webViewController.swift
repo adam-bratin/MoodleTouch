@@ -24,6 +24,16 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let creds : NSDictionary? = SecurityControl.evaluateTouch(self, withDomain: self.domain)
+        var theConfiguration = WKWebViewConfiguration()
+        let source = "document.body.style.background = \"#777\";"
+        let userScript = WKUserScript(source: source, injectionTime: .AtDocumentEnd, forMainFrameOnly: true)
+        
+        let userContentController = WKUserContentController()
+        userContentController.addUserScript(userScript)
+        
+        let configuration = WKWebViewConfiguration()
+        configuration.userContentController = userContentController
         self.webView = WKWebView(frame:view.frame, configuration: WKWebViewConfiguration())
         webView.navigationDelegate = self;
         view.addSubview(webView)
@@ -39,36 +49,36 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
     }
     
     
-    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
-        
-        println("HERE")
-        if (challenge.previousFailureCount == 0){
-            let creds : NSDictionary? = SecurityControl.evaluateTouch(self, withDomain: self.domain)
-            //        var authentication: NSURLCredential = (user:password:persistence:)
-        }
-    }
-    
-    func webView(webView: UIWebView!, shouldStartLoadWithRequest request: NSURLRequest!, navigationType: UIWebViewNavigationType) -> Bool {
-        return true
-    }
-    
-    func connection(connection:NSURLConnection!, willSendRequestForAuthenticationChallenge challenge:NSURLAuthenticationChallenge!) {
-        println("HERE")
-        if (challenge.previousFailureCount == 0){
-            
-            //    var authentication: NSURLCredential = (user:password:persistence:)
-        } else {
-//            challenge.sender(cancelAuthenticationChallenge:challenge)
-        }
-    }
-    
-    func connection(connection : NSURLConnection!, didReceiveResponse response : NSURLResponse) {
-        let url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
-        let request :NSURLRequest! = NSURLRequest(URL: url)
-        self.webView.loadRequest(request)
-    }
-    
-    func connectionShouldUseCredentialStorage(connection : NSURLConnection) -> Bool {
-        return false;
-    }
+//    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
+//        
+//        println("HERE")
+//        if (challenge.previousFailureCount == 0){
+//            
+//            //        var authentication: NSURLCredential = (user:password:persistence:)
+//        }
+//    }
+//    
+//    func webView(webView: UIWebView!, shouldStartLoadWithRequest request: NSURLRequest!, navigationType: UIWebViewNavigationType) -> Bool {
+//        return true
+//    }
+//    
+//    func connection(connection:NSURLConnection!, willSendRequestForAuthenticationChallenge challenge:NSURLAuthenticationChallenge!) {
+//        println("HERE")
+//        if (challenge.previousFailureCount == 0){
+//            
+//            //    var authentication: NSURLCredential = (user:password:persistence:)
+//        } else {
+////            challenge.sender(cancelAuthenticationChallenge:challenge)
+//        }
+//    }
+//    
+//    func connection(connection : NSURLConnection!, didReceiveResponse response : NSURLResponse) {
+//        let url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
+//        let request :NSURLRequest! = NSURLRequest(URL: url)
+//        self.webView.loadRequest(request)
+//    }
+//    
+//    func connectionShouldUseCredentialStorage(connection : NSURLConnection) -> Bool {
+//        return false;
+//    }
 }
