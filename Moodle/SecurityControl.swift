@@ -14,18 +14,15 @@ import Foundation
 class SecurityControl: NSObject {
     class func addItem(domain : String, withUsername username : String, usingPassword password: String) -> Bool {
         
-//        let query : [String: AnyObject] = [
-//            kSecClass             : kSecClassInternetPassword,
-//            kSecAttrServer       : domain,
-//            kSecAttrAccount       : username,
-//            kSecValueData         : password,
-//            kSecAttrAccessible : kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-//        ]
-        var query: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPassword, domain, username, password, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly], forKeys: [kSecClass, kSecAttrServer, kSecAttrAccount, kSecValueData, kSecAttrAccessible])
-        let dataTypeRef : UnsafeMutablePointer<Unmanaged<AnyObject>?> = nil
-        let status: OSStatus = SecItemAdd(query as CFDictionaryRef, dataTypeRef)
+        var data: NSData? = password.dataUsingEncoding(NSUTF8StringEncoding)
+        var query = NSMutableDictionary()
+        query[kSecClass as String] = kSecClassInternetPassword
+        query[kSecAttrServer as String] = domain
+        query[kSecAttrAccount as String] = username
+        query[kSecValueData as String] = data
+        query[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        var status: OSStatus = SecItemAdd(query as CFDictionaryRef, nil)
         
-        println("Status Add: \(dataTypeRef)")
         println(errSecSuccess)
         println(noErr)
         
@@ -34,58 +31,72 @@ class SecurityControl: NSObject {
     
     class func updateItem(domain : String, withUsername username : String, usingPassword password : String) -> Bool {
 
-        let query = [
-            kSecClass as String : kSecClassGenericPassword,
-            kSecAttrService : domain,
-            kSecUseOperationPrompt as String : Constants.updateKeychainPrompt]
+        var query = NSMutableDictionary()
+        query[kSecClass as String] = kSecClassInternetPassword
+        query[kSecAttrServer as String] = domain
+        query[kSecUseOperationPrompt as String] = Constants.updateKeychainPrompt
 
-        let changes = [
-            kSecAttrAccount as String : username,
-            kSecValueData as String : password]
+        var changes = NSMutableDictionary()
+        changes[kSecAttrAccount as String] = username
+        changes[kSecValueData as String] = password
         
-        let status: OSStatus = SecItemUpdate(query as CFDictionaryRef, changes as CFDictionaryRef)
-        
-        println("Status Update: \(status)")
+        var status: OSStatus = SecItemUpdate(query as CFDictionaryRef, changes as CFDictionaryRef)
         
         return status == noErr
     }
     
     class func deleteItem(domain : String) -> Bool {
-        let query = [
-            kSecClass as String : kSecClassGenericPassword,
-            kSecAttrService : domain]
-        let status: OSStatus = SecItemDelete(query as CFDictionaryRef)
+        var query = NSMutableDictionary()
+        query[kSecClass as String] = kSecClassInternetPassword
+        query[kSecAttrServer as String] = domain
+        var status: OSStatus = SecItemDelete(query as CFDictionaryRef)
         println("Status Add: \(status)")
         return status == noErr
         
     }
     
-//    class func loadItem(domain : String) -> NSDictionary? {
-
-//    }
-    
-    class func loadItem(domain : String) -> NSDictionary? {
-        let query = [
-            kSecClass as String : kSecClassGenericPassword,
-            kSecAttrService as String : domain,
-            kSecReturnAttributes as String : true,
-            kSecMatchLimit as String : kSecMatchLimitOne,
-            kSecUseOperationPrompt as String : "Authenticate to retrieve your username/password!"
-        ]
-
-        var dataTypeRef :Unmanaged<AnyObject>?
-        let status: OSStatus = SecItemCopyMatching(query, &dataTypeRef)
+    class func loadItem(domain : String) -> (Dictionary<String,String>) {
+        var query = NSMutableDictionary()
+        query[kSecClass as String] = kSecClassInternetPassword
+        query[kSecAttrServer as String] = domain
+        query[kSecReturnAttributes as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        var dataTypeRef : Unmanaged<AnyObject>?
+        var status: OSStatus = SecItemCopyMatching(query, &dataTypeRef)
         let opaque = dataTypeRef?.toOpaque()
         var credentials: NSDictionary?
-        println("Status load: \(status)")
-        if status == noErr {
-            println("HERE")
-            let data = Unmanaged<NSData>.fromOpaque(opaque!).takeUnretainedValue() as NSData
-            
+        if let opaque = opaque {
+            var data = Unmanaged<NSDictionary>.fromOpaque(opaque).takeUnretainedValue()
             // Convert the data retrieved from the keychain into a string
-            credentials = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? NSDictionary
+            credentials = NSDictionary(dictionary: data)
         }
-        return credentials
+        
+        var query2 = NSMutableDictionary()
+        query2[kSecClass as String] = kSecClassInternetPassword
+        query2[kSecAttrServer as String] = domain
+        query2[kSecReturnData as String] = true
+        query2[kSecMatchLimit as String] = kSecMatchLimitOne
+        var dataTypeRef2 : Unmanaged<AnyObject>?
+        var status2: OSStatus = SecItemCopyMatching(query2, &dataTypeRef2)
+        var opaque2 = dataTypeRef2?.toOpaque()
+        var password : NSString?
+        if let opaque2 = opaque2 {
+            var data = Unmanaged<NSData>.fromOpaque(opaque2).takeUnretainedValue()
+            // Convert the data retrieved from the keychain into a string
+            password = NSString(data: data, encoding: NSUTF8StringEncoding)
+            
+        }
+        var result : Dictionary<String, String>
+        if let creds = credentials {
+            if let pswd = password  {
+                result = ["username" : creds["acct"] as String, "password" : pswd as String]
+            } else {
+                result = Dictionary<String, String>()
+            }
+        } else {
+            result = Dictionary<String, String>()
+        }
+        return result
     }
     
     class func resetKeychain() -> Bool {
@@ -108,25 +119,23 @@ class SecurityControl: NSObject {
         }
     }
     
-    class func evaluateTouch(viewController : webViewController, withDomain domain : String) -> NSDictionary? {
-        let context = LAContext()
-        var authError : NSError?
-        var credentials : NSDictionary?
-        if context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error:&authError) {
-            context.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics,
-                localizedReason: "I need to see if it's really you",
-                reply: {(success: Bool, error: NSError!) -> Void in
-                    
-                    if success {
-                        credentials = SecurityControl.loadItem(domain)
-                        println("Credentials: \(credentials)")
-                    } else {
-                        credentials = nil
-                    }
+    class func evaluateTouch(viewController : webViewController, withDomain domain : String) {
+//        var credentials : Dictionary<String,String>
+        var touchIDContext = LAContext()
+        var touchIDError : NSError?
+        var reasonString = "I need to see if it's really you"
+        if (touchIDContext.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error:&touchIDError)) {
+            touchIDContext.evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: {
+                (success: Bool, error: NSError?) -> Void in
+                if success {
+                        viewController.creds = SecurityControl.loadItem(domain)
+                } else {
+                    viewController.creds = Dictionary<String, String>()
+                }
             })
         } else {
-            credentials = nil
+            viewController.creds = Dictionary<String, String>()
         }
-        return credentials
+        viewController.loadPage()
     }
 }

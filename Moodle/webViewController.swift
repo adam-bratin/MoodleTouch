@@ -11,6 +11,7 @@ import WebKit
 
 class webViewController: UIViewController, WKNavigationDelegate, NSURLConnectionDelegate {
     var domain : String = ""
+    var creds : Dictionary<String,String> = Dictionary<String,String>()
     @IBOutlet var webView : WKWebView!
     
 //    init(domainNew: String) {
@@ -24,28 +25,39 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let creds : NSDictionary? = SecurityControl.evaluateTouch(self, withDomain: self.domain)
-        var theConfiguration = WKWebViewConfiguration()
-        let source = "document.body.style.background = \"#777\";"
-        let userScript = WKUserScript(source: source, injectionTime: .AtDocumentEnd, forMainFrameOnly: true)
+        SecurityControl.evaluateTouch(self, withDomain: self.domain)
         
-        let userContentController = WKUserContentController()
-        userContentController.addUserScript(userScript)
-        
-        let configuration = WKWebViewConfiguration()
-        configuration.userContentController = userContentController
-        self.webView = WKWebView(frame:view.frame, configuration: WKWebViewConfiguration())
-        webView.navigationDelegate = self;
-        view.addSubview(webView)
-        let url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
-        let request :NSURLRequest! = NSURLRequest(URL: url)
-        webView.loadRequest(request)
-        println(webView)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func loadPage() {
+        if let usr = creds["password"] {
+            var password = creds["password"]
+            var username = creds["username"]
+            var theConfiguration = WKWebViewConfiguration()
+            var source : String = "document.getElementById(username).set(\"value\",\(username)); \n"
+            source += "document.getElementById(password).set(\"value\",\(password)); \n"
+            source += "document.getElementById(fm1).submit(); \n"
+            let userScript = WKUserScript(source: source, injectionTime: .AtDocumentEnd, forMainFrameOnly: true)
+            
+            let userContentController = WKUserContentController()
+            userContentController.addUserScript(userScript)
+            
+            let configuration = WKWebViewConfiguration()
+            configuration.userContentController = userContentController
+            self.webView = WKWebView(frame:view.frame, configuration: WKWebViewConfiguration())
+            webView.navigationDelegate = self;
+            view.addSubview(webView)
+            let url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
+            let request :NSURLRequest! = NSURLRequest(URL: url)
+            webView.loadRequest(request)
+        } else {
+            SecurityControl.evaluateTouch(self, withDomain: domain)
+        }
     }
     
     
