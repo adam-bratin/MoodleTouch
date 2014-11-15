@@ -23,8 +23,7 @@ class SecurityControl: NSObject {
         query[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         var status: OSStatus = SecItemAdd(query as CFDictionaryRef, nil)
         
-        println(errSecSuccess)
-        println(noErr)
+        println(status)
         
         return status == errSecSuccess
     }
@@ -121,66 +120,68 @@ class SecurityControl: NSObject {
     
     class func evaluateTouch(viewController : webViewController, withDomain domain : String) {
 //        var credentials : Dictionary<String,String>
-        let highPriorityQueue : dispatch_queue_t = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1), highPriorityQueue, {
-            viewController.startTouchID = true
-            let touchIDContext = LAContext()
-            var touchIDError : NSError?
-            var reasonString = "I need to see if it's really you"
-            if (touchIDContext.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &touchIDError)) {
-                touchIDContext .evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success: Bool, evalPolicyError: NSError?) -> Void in
-                    if success {
-                            viewController.creds = SecurityControl.loadItem(domain)
-                    } else {
-                        viewController.creds = Dictionary<String, String>()
-                        println(evalPolicyError?.localizedDescription)
+        
+        viewController.startTouchID = true
+        let touchIDContext = LAContext()
+        var touchIDError : NSError?
+        var reasonString = "I need to see if it's really you"
+        if (touchIDContext.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &touchIDError)) {
+            touchIDContext .evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success: Bool, evalPolicyError: NSError?) -> Void in
+                if success {
+                    viewController.creds = SecurityControl.loadItem(domain)
+                    println(viewController.creds)
+                    viewController.createLoginScript()
+                } else {
+                    viewController.creds = Dictionary<String, String>()
+                    println(evalPolicyError?)
+                    
+                    switch evalPolicyError!.code {
                         
-                        switch evalPolicyError!.code {
-                            
-                        case LAError.SystemCancel.rawValue:
-                            println("Authentication was cancelled by the system")
-                            
-                        case LAError.UserCancel.rawValue:
-                            println("Authentication was cancelled by the user")
-                            
-                        case LAError.UserFallback.rawValue:
-                            println("User selected to enter custom password")
-                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                                SecurityControl.showPasswordAlert(viewController)
-                            })
-                            
-                        default:
-                            println("Authentication failed")
-                            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                                SecurityControl.showPasswordAlert(viewController)
-                            })
-                        }
+                    case LAError.SystemCancel.rawValue:
+                        println("Authentication was cancelled by the system")
+                        
+                    case LAError.UserCancel.rawValue:
+                        println("Authentication was cancelled by the user")
+                        
+                    case LAError.UserFallback.rawValue:
+                        println("User selected to enter custom password")
+                        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                            SecurityControl.showPasswordAlert(viewController)
+                        })
+                        
+                    default:
+                        println("Authentication failed")
+                        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                            SecurityControl.showPasswordAlert(viewController)
+                        })
                     }
-                })
-            } else {
-                viewController.creds = Dictionary<String, String>()
-                // If the security policy cannot be evaluated then show a short message depending on the error.
-                switch touchIDError!.code{
-                    
-                case LAError.TouchIDNotEnrolled.rawValue:
-                    println("TouchID is not enrolled")
-                    
-                case LAError.PasscodeNotSet.rawValue:
-                    println("A passcode has not been set")
-                    
-                default:
-                    // The LAError.TouchIDNotAvailable case.
-                    println("TouchID not available")
+                    viewController.createLoginScript()
                 }
+            })
+        } else {
+            viewController.creds = Dictionary<String, String>()
+            // If the security policy cannot be evaluated then show a short message depending on the error.
+            switch touchIDError!.code{
                 
-                // Optionally the error description can be displayed on the console.
-                println(touchIDError?.localizedDescription)
+            case LAError.TouchIDNotEnrolled.rawValue:
+                println("TouchID is not enrolled")
                 
-                // Show the custom alert view to allow users to enter the password.
-                SecurityControl.showPasswordAlert(viewController)
+            case LAError.PasscodeNotSet.rawValue:
+                println("A passcode has not been set")
+                
+            default:
+                // The LAError.TouchIDNotAvailable case.
+                println("TouchID not available")
             }
-            viewController.loadPage()
-        })
+            
+            // Optionally the error description can be displayed on the console.
+            println(touchIDError?.localizedDescription)
+            
+            // Show the custom alert view to allow users to enter the password.
+            SecurityControl.showPasswordAlert(viewController)
+            
+            viewController.createLoginScript()
+        }
     }
     
     class func showPasswordAlert(viewController : webViewController) {

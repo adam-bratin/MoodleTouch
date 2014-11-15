@@ -210,28 +210,44 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aRt-of-9zE">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
-                                    <barButtonItem systemItem="stop" id="1rC-Kl-z7C"/>
+                                    <barButtonItem width="22" systemItem="stop" id="1rC-Kl-z7C">
+                                        <connections>
+                                            <action selector="stopLoad:" destination="xww-vB-zw5" id="vK0-5r-gCy"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" id="5EK-Oh-anG">
                                         <button key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dRl-JU-1iU">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </button>
                                     </barButtonItem>
-                                    <barButtonItem systemItem="refresh" id="Dqq-Xh-U6C"/>
+                                    <barButtonItem width="15" systemItem="refresh" id="Dqq-Xh-U6C">
+                                        <connections>
+                                            <action selector="reload:" destination="xww-vB-zw5" id="NI1-su-N6E"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" id="Vhl-iN-l4Z">
                                         <button key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="SYo-9C-l1C">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </button>
                                     </barButtonItem>
-                                    <barButtonItem systemItem="rewind" id="o0z-o2-SBZ"/>
+                                    <barButtonItem width="22" systemItem="rewind" id="o0z-o2-SBZ">
+                                        <connections>
+                                            <action selector="backward:" destination="xww-vB-zw5" id="aAY-FA-7Ax"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" id="s6O-QG-KEk">
                                         <button key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8Vv-1r-HDN">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </button>
                                     </barButtonItem>
-                                    <barButtonItem systemItem="fastForward" id="SHp-Yq-HfI"/>
+                                    <barButtonItem width="22" systemItem="fastForward" id="SHp-Yq-HfI">
+                                        <connections>
+                                            <action selector="forward:" destination="xww-vB-zw5" id="iI0-rC-TxL"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -262,6 +278,11 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="backwardButton" destination="o0z-o2-SBZ" id="QOd-mP-zr9"/>
+                        <outlet property="forwardButton" destination="SHp-Yq-HfI" id="bAP-7i-dh7"/>
+                        <outlet property="reloadButton" destination="Dqq-Xh-U6C" id="Tg0-YI-oEr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZZn-05-Q2i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
