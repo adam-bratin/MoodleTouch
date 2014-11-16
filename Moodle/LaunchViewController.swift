@@ -13,12 +13,13 @@ class LaunchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     @IBOutlet var serverPicker : UIPickerView!
     var pickerData = []
     @IBAction func connectToServer(button : UIButton) {
-        let selectedServer : Int = self.serverPicker.selectedRowInComponent(0)
-//        let vc : webViewController = webViewController(domainNew: self.pickerData[selectedServer].domain)
-        let vc : webViewController = self.storyboard?.instantiateViewControllerWithIdentifier(Constants.webViewController) as webViewController
-        vc.domain = self.pickerData[selectedServer].domain
-        
-        self.navigationController?.pushViewController(vc, animated: true)
+        if(self.pickerData.count > 0) {
+            let selectedServer : Int = self.serverPicker.selectedRowInComponent(0)
+            let vc : webViewController = self.storyboard?.instantiateViewControllerWithIdentifier(Constants.webViewController) as webViewController
+            vc.domain = self.pickerData[selectedServer].domain
+            
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     @IBAction func addServer(button : UIButton) {
@@ -44,9 +45,6 @@ class LaunchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         let fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
         var error: NSError? = nil
         self.pickerData = managedObjectContext!.executeFetchRequest(fetchRequest, error:&error) as [Server]
-        if(self.pickerData.count == 0) {
-            self.pickerData = ["No Servers"]
-        }
         self.serverPicker.delegate = self
         self.serverPicker.dataSource = self
         self.serverPicker.selectRow(0, inComponent: 0, animated: true)

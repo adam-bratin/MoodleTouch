@@ -78,7 +78,7 @@ class Server: NSManagedObject {
         }
     }
     
-    class func deleteServer(viewController :LoginViewController, withDomain domain: String) {
+    class func deleteServer(viewController :LoginViewController, withDomain domain: String) -> Bool {
         viewController.errorField.text = ""
         if(viewController.serverURLField.text != "") {
             var fetchRequest = NSFetchRequest(entityName: Constants.serverItemIdentifier)
@@ -93,14 +93,18 @@ class Server: NSManagedObject {
                 var error2 : NSError? = nil
                 if(viewController.managedObjectContext?.hasChanges == true && viewController.managedObjectContext?.save(&error2) == false) {
                     println("Save did not complete successfully. Error: \(error2?.localizedDescription)")
+                    return false
                 } else {
 //                    createAlert("Success", message: "You deleted the server", viewController: viewController)
+                    return true
                 }
             } else {
                 viewController.errorField.text = "Error: no server with that name"
+                return false
             }
         } else {
             viewController.errorField.text = "Error: server URL is empty"
+            return false
         }
     }
 }

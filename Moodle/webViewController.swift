@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class webViewController: UIViewController, WKNavigationDelegate, NSURLConnectionDelegate, UIAlertViewDelegate, WKScriptMessageHandler {
+class webViewController: UIViewController, WKNavigationDelegate, NSURLConnectionDelegate, UIAlertViewDelegate {
     var domain : String = ""
     var creds : Dictionary<String,String> = Dictionary<String,String>()
     var startTouchID : Bool = false
@@ -56,26 +56,19 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
         if let usr = creds["password"] {
             var password = creds["password"]
             var username = creds["username"]
-            
-            var script : String = "document.getElementById(\"username\").value = \"\(username!)\"; \n"
-            script += "document.getElementById(\"password\").value = \"\(password!)\"; \n"
-//            document.getElementById("password").parentNode.submit()
-            script += "document.getElementById(\"password\").parentNode.submit()"
+            var script : String = "document.querySelectorAll(\"input[type='text']\")[0].value = \"\(username!)\"; \n"
+            script += "document.querySelectorAll(\"input[type='password']\")[0].value = \"\(password!)\"; \n"
+            script += "document.querySelectorAll(\"input[type='password']\")[0].parentNode.submit(); \n"
+            script += "var allLinks = document.getElementsByTagName(\"a\"); \n"
+            script += "for (i=0; i<allLinks.length; i++) { \n"
+            script += "allLinks[i].onclick = \"\"; \n"
+            script += "allLinks[i].target = \"_self\"; \n"
+            script += "} \n"
             var userScript : WKUserScript = WKUserScript(source: script, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
             self.webView.configuration.userContentController.addUserScript(userScript)
             self.webView.reload()
-//            self.webView.evaluateJavaScript(script, completionHandler: {(result : AnyObject!, error : NSError!) -> Void in
-//                if(error != nil) {
-//                    println("Error: \(error.localizedDescription)")
-//                    println(script)
-//                }
-//            })
         } else {
             SecurityControl.evaluateTouch(self, withDomain: domain)
         }
-    }
-    
-     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        println("got message: \(message.body)")
     }
 }

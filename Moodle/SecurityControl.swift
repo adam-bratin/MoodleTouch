@@ -22,9 +22,6 @@ class SecurityControl: NSObject {
         query[kSecValueData as String] = data
         query[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         var status: OSStatus = SecItemAdd(query as CFDictionaryRef, nil)
-        
-        println(status)
-        
         return status == errSecSuccess
     }
     
@@ -49,7 +46,6 @@ class SecurityControl: NSObject {
         query[kSecClass as String] = kSecClassInternetPassword
         query[kSecAttrServer as String] = domain
         var status: OSStatus = SecItemDelete(query as CFDictionaryRef)
-        println("Status Add: \(status)")
         return status == noErr
         
     }
@@ -129,7 +125,6 @@ class SecurityControl: NSObject {
             touchIDContext .evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success: Bool, evalPolicyError: NSError?) -> Void in
                 if success {
                     viewController.creds = SecurityControl.loadItem(domain)
-                    println(viewController.creds)
                     viewController.createLoginScript()
                 } else {
                     viewController.creds = Dictionary<String, String>()

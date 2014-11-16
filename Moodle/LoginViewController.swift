@@ -31,8 +31,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func buttonClick(sender : AnyObject) {
         if(sender as UIButton == self.deleteButton) {
-            Server.deleteServer(self, withDomain: self.serverURLField.text)
-            SecurityControl.deleteItem(self.serverURLField.text)
+            if(Server.deleteServer(self, withDomain: self.serverURLField.text)) {
+                if(SecurityControl.deleteItem(self.serverURLField.text)) {
+                    createAlert("success", message: "The server was deleted from save list")
+                }
+            }
         } else {
             if(self.passwordField.text == self.confirmPasswordField.text) {
                 if(sender as UIButton == self.createButton) {
