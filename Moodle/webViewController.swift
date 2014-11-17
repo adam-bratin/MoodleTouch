@@ -9,10 +9,12 @@
 import UIKit
 import WebKit
 
-class webViewController: UIViewController, WKNavigationDelegate, NSURLConnectionDelegate, UIAlertViewDelegate {
+class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDelegate, UITextFieldDelegate {
     var domain : String = ""
     var creds : Dictionary<String,String> = Dictionary<String,String>()
     var startTouchID : Bool = false
+
+    @IBOutlet var mNavigationController : MoodleNavigationController!
     @IBOutlet var webView : WKWebView!
     @IBOutlet var stopLoadingButton : UIBarButtonItem!
     @IBOutlet var reloadButton : UIBarButtonItem!
@@ -33,23 +35,24 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var userContentController = WKUserContentController()
-        var configuration = WKWebViewConfiguration()
-        configuration.userContentController = userContentController
-        self.webView = WKWebView(frame:view.frame, configuration: WKWebViewConfiguration())
-        self.webView.navigationDelegate = self;
-        self.view.addSubview(self.webView)
-        self.webView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-        self.webView.allowsBackForwardNavigationGestures = true
-        var url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
-        var request :NSURLRequest! = NSURLRequest(URL: url)
-        self.webView.loadRequest(request)
+        self.mNavigationController = self.navigationController! as MoodleNavigationController
+        self.setupNavigationBar()
+        self.initializeWebView()
         SecurityControl.evaluateTouch(self, withDomain: self.domain)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        self.webView.removeObserver(self, forKeyPath:Constants.progressID)
+        self.webView.removeObserver(self, forKeyPath:Constants.URLID)
+        self.webView.removeObserver(self, forKeyPath:Constants.loadingID)
+        self.mNavigationController.URLField.hidden = true
+        self.mNavigationController.loadProgress.hidden = true
     }
     
     func createLoginScript() {
@@ -72,11 +75,58 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
         }
     }
     
+    func initializeWebView() {
+        var userContentController = WKUserContentController()
+        var configuration = WKWebViewConfiguration()
+        configuration.userContentController = userContentController
+        self.webView = WKWebView(frame:view.frame, configuration: WKWebViewConfiguration())
+        self.webView.navigationDelegate = self;
+        self.webView.addObserver(self, forKeyPath: Constants.progressID, options: NSKeyValueObservingOptions.New, context: nil)
+        self.webView.addObserver(self, forKeyPath: Constants.URLID, options: NSKeyValueObservingOptions.New, context: nil)
+        self.webView.addObserver(self, forKeyPath: Constants.loadingID, options: NSKeyValueObservingOptions.New, context: nil)
+        self.mNavigationController.URLField.hidden = false
+        self.mNavigationController.loadProgress.hidden = false
+        self.view.addSubview(self.webView)
+        self.webView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.webView.allowsBackForwardNavigationGestures = true
+        var url : NSURL! = NSURL(string: Constants.moodleURL + self.domain)
+        var request :NSURLRequest! = NSURLRequest(URL: url)
+        self.webView.loadRequest(request)
+    }
+    
+    func setupNavigationBar() {
+    }
+    
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if(buttonIndex == alertView.cancelButtonIndex) {
             self.navigationController?.popViewControllerAnimated(true)
         } else {
             //check device password
         }
+    }
+    
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        
+        if (keyPath == Constants.progressID && object as NSObject == self.webView) {
+            var progress : Float
+            if(self.webView.estimatedProgress == 1) {
+                progress = Float(0)
+                self.mNavigationController.loadProgress.setProgress(progress, animated: false)
+            }else {
+                progress = Float(self.webView.estimatedProgress)
+                self.mNavigationController.loadProgress.setProgress(progress, animated: true)
+            }
+            
+        } else if(keyPath == Constants.URLID && object as NSObject == self.webView) {
+            self.mNavigationController.URLField.text = self.webView.URL!.absoluteString!
+        }
+    }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        removeFirstResponders()
+    }
+    
+    func removeFirstResponders() {
+        self.mNavigationController.URLField.resignFirstResponder()
     }
 }

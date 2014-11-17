@@ -25,6 +25,7 @@
 		064A12A91A173B3E0040FD57 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 064A129E1A173B3E0040FD57 /* Icon-Small@2x.png */; };
 		064A12AA1A173B3E0040FD57 /* Icon-Small@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 064A129F1A173B3E0040FD57 /* Icon-Small@3x.png */; };
 		064A12AB1A173B3E0040FD57 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 064A12A01A173B3E0040FD57 /* iTunesArtwork@2x.png */; };
+		064E07951A19792E000B2D1D /* MoodleNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064E07941A19792E000B2D1D /* MoodleNavigationController.swift */; };
 		0664323C1A149720000AD9AE /* webViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0664323B1A149720000AD9AE /* webViewController.swift */; };
 		066FA6B41A12BBF800B39277 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066FA6B31A12BBF800B39277 /* Constants.swift */; };
 		066FA6B71A12C0B600B39277 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066FA6B61A12C0B600B39277 /* Server.swift */; };
@@ -65,6 +66,7 @@
 		064A129E1A173B3E0040FD57 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		064A129F1A173B3E0040FD57 /* Icon-Small@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@3x.png"; sourceTree = "<group>"; };
 		064A12A01A173B3E0040FD57 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
+		064E07941A19792E000B2D1D /* MoodleNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodleNavigationController.swift; sourceTree = "<group>"; };
 		0664323B1A149720000AD9AE /* webViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = webViewController.swift; sourceTree = "<group>"; };
 		066FA6B31A12BBF800B39277 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		066FA6B61A12C0B600B39277 /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				063BDC531A116D7D00E82C90 /* LoginViewController.swift */,
 				06BC47711A1289CD007C9257 /* LaunchViewController.swift */,
 				0664323B1A149720000AD9AE /* webViewController.swift */,
+				064E07941A19792E000B2D1D /* MoodleNavigationController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 				063BDC541A116D7D00E82C90 /* LoginViewController.swift in Sources */,
 				063BDC4F1A116D7D00E82C90 /* AppDelegate.swift in Sources */,
 				063BDC521A116D7D00E82C90 /* Moodle.xcdatamodeld in Sources */,
+				064E07951A19792E000B2D1D /* MoodleNavigationController.swift in Sources */,
 				066FA6B91A13D22800B39277 /* SecurityControl.swift in Sources */,
 				066FA6B71A12C0B600B39277 /* Server.swift in Sources */,
 				06BC47721A1289CD007C9257 /* LaunchViewController.swift in Sources */,

@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
-        <!--LaunchViewController-->
+        <!--LoginViewController-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" title="LaunchViewController" id="vXZ-lx-hvc" customClass="LoginViewController" customModule="Moodle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" title="LoginViewController" id="vXZ-lx-hvc" customClass="LoginViewController" customModule="Moodle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -195,22 +195,22 @@
             </objects>
             <point key="canvasLocation" x="1630.5" y="256"/>
         </scene>
-        <!--Web View Controller-->
+        <!--WebViewController-->
         <scene sceneID="fmx-0q-kKN">
             <objects>
-                <viewController storyboardIdentifier="webViewController" id="xww-vB-zw5" customClass="webViewController" customModule="Moodle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="webViewController" title="WebViewController" id="xww-vB-zw5" customClass="webViewController" customModule="Moodle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Wg4-gb-gF3"/>
                         <viewControllerLayoutGuide type="bottom" id="odA-CJ-ZtK"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KGw-dn-Ubm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aRt-of-9zE">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
-                                    <barButtonItem width="22" systemItem="stop" id="1rC-Kl-z7C">
+                                    <barButtonItem width="30" systemItem="stop" id="1rC-Kl-z7C">
                                         <connections>
                                             <action selector="stopLoad:" destination="xww-vB-zw5" id="vK0-5r-gCy"/>
                                         </connections>
@@ -221,7 +221,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </button>
                                     </barButtonItem>
-                                    <barButtonItem width="15" systemItem="refresh" id="Dqq-Xh-U6C">
+                                    <barButtonItem width="30" systemItem="refresh" id="Dqq-Xh-U6C">
                                         <connections>
                                             <action selector="reload:" destination="xww-vB-zw5" id="NI1-su-N6E"/>
                                         </connections>
@@ -232,7 +232,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </button>
                                     </barButtonItem>
-                                    <barButtonItem width="22" systemItem="rewind" id="o0z-o2-SBZ">
+                                    <barButtonItem width="30" systemItem="rewind" id="o0z-o2-SBZ">
                                         <connections>
                                             <action selector="backward:" destination="xww-vB-zw5" id="aAY-FA-7Ax"/>
                                         </connections>
@@ -243,7 +243,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </button>
                                     </barButtonItem>
-                                    <barButtonItem width="22" systemItem="fastForward" id="SHp-Yq-HfI">
+                                    <barButtonItem width="30" systemItem="fastForward" id="SHp-Yq-HfI">
                                         <connections>
                                             <action selector="forward:" destination="xww-vB-zw5" id="iI0-rC-TxL"/>
                                         </connections>
@@ -285,13 +285,18 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZZn-05-Q2i" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="s14-SA-Sjw">
+                    <connections>
+                        <outlet property="delegate" destination="xww-vB-zw5" id="CNG-M5-gr2"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2343" y="256"/>
+            <point key="canvasLocation" x="2346" y="256"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Moodle Navigation Controller-->
         <scene sceneID="io6-Dq-nUl">
             <objects>
-                <navigationController id="XpN-dO-EhD" sceneMemberID="viewController">
+                <navigationController id="XpN-dO-EhD" customClass="MoodleNavigationController" customModule="Moodle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9SN-TB-MnK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

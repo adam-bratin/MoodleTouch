@@ -14,4 +14,7 @@ public struct Constants {
     static let serverItemIdentifier = "Server"
     static let updateKeychainPrompt = "Authenticate to update your password"
     static let moodleURL = "http://moodle."
+    static let progressID = "estimatedProgress"
+    static let URLID = "URL"
+    static let loadingID = "loading"
 }
