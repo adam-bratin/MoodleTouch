@@ -71,4 +71,12 @@ class webViewController: UIViewController, WKNavigationDelegate, NSURLConnection
             SecurityControl.evaluateTouch(self, withDomain: domain)
         }
     }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if(buttonIndex == alertView.cancelButtonIndex) {
+            self.navigationController?.popViewControllerAnimated(true)
+        } else {
+            //check device password
+        }
+    }
 }

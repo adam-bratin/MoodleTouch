@@ -134,15 +134,21 @@ class SecurityControl: NSObject {
                         
                     case LAError.SystemCancel.rawValue:
                         println("Authentication was cancelled by the system")
+                        println("Cancel")
+                        viewController.navigationController?.popViewControllerAnimated(true)
+                        return
                         
                     case LAError.UserCancel.rawValue:
                         println("Authentication was cancelled by the user")
+                        println("cancel")
+                        viewController.navigationController?.popViewControllerAnimated(true)
+                        return
                         
-                    case LAError.UserFallback.rawValue:
-                        println("User selected to enter custom password")
-                        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                            SecurityControl.showPasswordAlert(viewController)
-                        })
+//                    case LAError.UserFallback.rawValue:
+//                        println("User selected to enter custom password")
+//                        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+//                            SecurityControl.showPasswordAlert(viewController)
+//                        })
                         
                     default:
                         println("Authentication failed")
