@@ -77,6 +77,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: - Delegates and data sources
+    //MARK: Delegate Functions
+    
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         removeFirstResponders()
     }

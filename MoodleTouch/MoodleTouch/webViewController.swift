@@ -36,7 +36,6 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.mNavigationController = self.navigationController! as MoodleNavigationController
-        self.setupNavigationBar()
         self.initializeWebView()
         SecurityControl.evaluateTouch(self, withDomain: self.domain)
     }
@@ -96,9 +95,6 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
         self.webView.loadRequest(request)
     }
     
-    func setupNavigationBar() {
-    }
-    
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if(buttonIndex == alertView.cancelButtonIndex) {
             self.navigationController?.popViewControllerAnimated(true)
@@ -123,6 +119,9 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
             self.mNavigationController.URLField.text = self.webView.URL!.absoluteString!
         }
     }
+    
+    //MARK: - Delegates and data sources
+    //MARK: Delegate Functions
     
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
         var newWindow : Bool = navigationAction.targetFrame == nil

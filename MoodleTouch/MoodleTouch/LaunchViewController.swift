@@ -71,7 +71,7 @@ class LaunchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         return self.pickerData.count
     }
     
-    //MARK: Delegates
+    //MARK: Delegate Functions
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         if(self.pickerData[row] is Server) {
             let server : Server = self.pickerData[row] as Server
