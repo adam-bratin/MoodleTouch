@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Moodle.xcscheme</key>
+		<key>MoodleTouch.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +12,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>063BDC481A116D7D00E82C90</key>
+		<key>06B8B1171A1A5C1C00E1D2C6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>063BDC601A116D7D00E82C90</key>
+		<key>06B8B12F1A1A5C1C00E1D2C6</key>
 		<dict>
 			<key>primary</key>
 			<true/>

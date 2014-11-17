@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "063BDC481A116D7D00E82C90"
-               BuildableName = "Moodle.app"
-               BlueprintName = "Moodle"
-               ReferencedContainer = "container:Moodle.xcodeproj">
+               BlueprintIdentifier = "06B8B1171A1A5C1C00E1D2C6"
+               BuildableName = "MoodleTouch.app"
+               BlueprintName = "MoodleTouch"
+               ReferencedContainer = "container:MoodleTouch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "063BDC601A116D7D00E82C90"
-               BuildableName = "MoodleTests.xctest"
-               BlueprintName = "MoodleTests"
-               ReferencedContainer = "container:Moodle.xcodeproj">
+               BlueprintIdentifier = "06B8B12F1A1A5C1C00E1D2C6"
+               BuildableName = "MoodleTouchTests.xctest"
+               BlueprintName = "MoodleTouchTests"
+               ReferencedContainer = "container:MoodleTouch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,20 +46,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "063BDC601A116D7D00E82C90"
-               BuildableName = "MoodleTests.xctest"
-               BlueprintName = "MoodleTests"
-               ReferencedContainer = "container:Moodle.xcodeproj">
+               BlueprintIdentifier = "06B8B12F1A1A5C1C00E1D2C6"
+               BuildableName = "MoodleTouchTests.xctest"
+               BlueprintName = "MoodleTouchTests"
+               ReferencedContainer = "container:MoodleTouch.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "063BDC481A116D7D00E82C90"
-            BuildableName = "Moodle.app"
-            BlueprintName = "Moodle"
-            ReferencedContainer = "container:Moodle.xcodeproj">
+            BlueprintIdentifier = "06B8B1171A1A5C1C00E1D2C6"
+            BuildableName = "MoodleTouch.app"
+            BlueprintName = "MoodleTouch"
+            ReferencedContainer = "container:MoodleTouch.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -75,10 +75,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "063BDC481A116D7D00E82C90"
-            BuildableName = "Moodle.app"
-            BlueprintName = "Moodle"
-            ReferencedContainer = "container:Moodle.xcodeproj">
+            BlueprintIdentifier = "06B8B1171A1A5C1C00E1D2C6"
+            BuildableName = "MoodleTouch.app"
+            BlueprintName = "MoodleTouch"
+            ReferencedContainer = "container:MoodleTouch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -93,10 +93,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "063BDC481A116D7D00E82C90"
-            BuildableName = "Moodle.app"
-            BlueprintName = "Moodle"
-            ReferencedContainer = "container:Moodle.xcodeproj">
+            BlueprintIdentifier = "06B8B1171A1A5C1C00E1D2C6"
+            BuildableName = "MoodleTouch.app"
+            BlueprintName = "MoodleTouch"
+            ReferencedContainer = "container:MoodleTouch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

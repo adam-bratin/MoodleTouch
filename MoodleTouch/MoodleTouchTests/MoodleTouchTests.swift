@@ -1,15 +1,15 @@
 //
-//  MoodleTests.swift
-//  MoodleTests
+//  MoodleTouchTests.swift
+//  MoodleTouchTests
 //
-//  Created by Adam Bratin on 11/10/14.
+//  Created by Adam Bratin on 11/17/14.
 //  Copyright (c) 2014 Bratin. All rights reserved.
 //
 
 import UIKit
 import XCTest
 
-class MoodleTests: XCTestCase {
+class MoodleTouchTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

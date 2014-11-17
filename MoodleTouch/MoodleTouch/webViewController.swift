@@ -64,7 +64,7 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
             script += "document.querySelectorAll(\"input[type='password']\")[0].parentNode.submit(); \n"
             script += "var allLinks = document.getElementsByTagName(\"a\"); \n"
             script += "for (i=0; i<allLinks.length; i++) { \n"
-            script += "allLinks[i].onclick = \"\"; \n"
+            script += "allLinks[i].onclick = null; \n"
             script += "allLinks[i].target = \"_self\"; \n"
             script += "} \n"
             var userScript : WKUserScript = WKUserScript(source: script, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
@@ -86,6 +86,8 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
         self.webView.addObserver(self, forKeyPath: Constants.loadingID, options: NSKeyValueObservingOptions.New, context: nil)
         self.mNavigationController.URLField.hidden = false
         self.mNavigationController.loadProgress.hidden = false
+        self.mNavigationController.URLField.returnKeyType = UIReturnKeyType.Go
+        self.mNavigationController.URLField.delegate = self
         self.view.addSubview(self.webView)
         self.webView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
         self.webView.allowsBackForwardNavigationGestures = true
@@ -120,6 +122,22 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
         } else if(keyPath == Constants.URLID && object as NSObject == self.webView) {
             self.mNavigationController.URLField.text = self.webView.URL!.absoluteString!
         }
+    }
+    
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+        var newWindow : Bool = navigationAction.targetFrame == nil
+        if (navigationAction.targetFrame == nil) {
+            self.webView.loadRequest(navigationAction.request)
+        }
+        decisionHandler(WKNavigationActionPolicy.Allow)
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        var url : NSURL! = NSURL(string:self.mNavigationController.URLField.text)
+        var request :NSURLRequest! = NSURLRequest(URL: url)
+        self.webView.loadRequest(request)
+        textField.resignFirstResponder()
+        return false
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {

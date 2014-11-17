@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B17" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Server" representedClassName="Moodle.Server" syncable="YES">
+    <entity name="Server" representedClassName="MoodleTouch.Server" syncable="YES">
         <attribute name="domain" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Server" positionX="-63" positionY="-18" width="128" height="58"/>
+        <element name="Server" positionX="-63" positionY="-18" width="128" height="60"/>
     </elements>
 </model>
