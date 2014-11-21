@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDelegate, UITextFieldDelegate {
+class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDelegate, UITextFieldDelegate, KeychainResultReturnDelegate {
     var domain : String = ""
     var creds : Dictionary<String,String> = Dictionary<String,String>()
     var startTouchID : Bool = false
@@ -20,6 +20,8 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
     @IBOutlet var reloadButton : UIBarButtonItem!
     @IBOutlet var forwardButton : UIBarButtonItem!
     @IBOutlet var backwardButton : UIBarButtonItem!
+    @IBOutlet var security : KeychainHandler! = KeychainHandler()
+    
     @IBAction func reload(sender : AnyObject) {
         self.webView.reload()
     }
@@ -36,8 +38,12 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         self.mNavigationController = self.navigationController! as MoodleNavigationController
+        self.security.ResultsDelegate = self
         self.initializeWebView()
-        SecurityControl.evaluateTouch(self, withDomain: self.domain)
+        self.security.copyMatchingAsync(self.domain)
+//        SecurityControl.evaluateTouch(self, withDomain: self.domain)
+//        SecurityControl.loadItem(self.domain)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -70,7 +76,7 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
             self.webView.configuration.userContentController.addUserScript(userScript)
             self.webView.reload()
         } else {
-            SecurityControl.evaluateTouch(self, withDomain: domain)
+//            SecurityControl.evaluateTouch(self, withDomain: domain)
         }
     }
     
@@ -145,5 +151,17 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
     
     func removeFirstResponders() {
         self.mNavigationController.URLField.resignFirstResponder()
+    }
+    
+    func returnKeychainResults(results: [NSObject : AnyObject]!) {
+        var outdic : NSDictionary? = NSDictionary(dictionary: results)
+        if let result = outdic  {
+            var username: String = result["acct"] as String
+            var password : NSString! = NSString(data: result["v_Data"] as NSData!, encoding: NSUTF8StringEncoding)
+            self.creds = [
+                "username" : username,
+                "password" : password]
+            createLoginScript()
+        }
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate, OSSStatusReturnDelegate {
     @IBOutlet var serverURLField : UITextField!
     @IBOutlet var usernameField : UITextField!
     @IBOutlet var passwordField : UITextField!
@@ -18,6 +18,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var editButton : UIButton!
     @IBOutlet var deleteButton : UIButton!
     @IBOutlet var createButton : UIButton!
+    @IBOutlet var security : KeychainHandler! = KeychainHandler()
     
     lazy var managedObjectContext : NSManagedObjectContext? = {
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
@@ -32,27 +33,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func buttonClick(sender : AnyObject) {
         if(sender as UIButton == self.deleteButton) {
             if(Server.deleteServer(self, withDomain: self.serverURLField.text)) {
-                if(SecurityControl.deleteItem(self.serverURLField.text)) {
-                    createAlert("success", message: "The server was deleted from save list")
-                }
+                self.security.deleteItemAsync(self.serverURLField.text)
             }
         } else {
             if(self.passwordField.text == self.confirmPasswordField.text) {
                 if(sender as UIButton == self.createButton) {
                     if(Server.createServer(self, withDomain: self.serverURLField.text, UsingUsername: self.usernameField.text, AndPassword: self.passwordField.text)) {
-                        if(SecurityControl.addItem(self.serverURLField.text, withUsername: self.usernameField.text, usingPassword: self.passwordField.text)) {
-                            createAlert("Success", message: "You added server to saved list")
-                        } else {
-                            Server.deleteServer(self, withDomain: self.serverURLField.text)
-                        }
+                        self.security.addItemAsync(self.serverURLField.text, withUsername: self.usernameField.text, andPassword: self.passwordField.text)
                     }
                 } else if(sender as UIButton == self.editButton) {
                     if(Server.editServer(self, withDomain: self.serverURLField.text, UsingUsername: self.usernameField.text, AndPassword: self.passwordField.text)) {
-                        if(SecurityControl.updateItem(self.serverURLField.text, withUsername: self.usernameField.text, usingPassword: self.passwordField.text)) {
-                            createAlert("Success", message: "You updated server to saved list")
-                        } else {
-                            Server.deleteServer(self, withDomain: self.serverURLField.text)
-                        }
+                        self.security.updateItemAsync(self.serverURLField.text, withUsername: self.usernameField.text, andPassword: self.passwordField.text)
                     }
                 }
             } else {
@@ -69,6 +60,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.security.OSSStatusDelegate = self
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -89,6 +81,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.usernameField.resignFirstResponder()
         self.passwordField.resignFirstResponder()
         self.confirmPasswordField.resignFirstResponder()
+    }
+    
+    func reutrnOSStatus(results: [NSObject : AnyObject]!) {
+        var outdic : NSDictionary? = NSDictionary(dictionary: results)
+        if let result = outdic  {
+            var type = result["type"] as String
+            var status = result["status"] as NSNumber
+            if(type == "delete" && status.intValue == noErr) {
+                createAlert("success", message: "The server was deleted from save list")
+            } else if(type == "update" && status.intValue == noErr) {
+                createAlert("Success", message: "You added server to saved list")
+            } else if(type == "add" && status.intValue == noErr) {
+                createAlert("Success", message: "You added server to saved list")
+            } else if(type == "add") {
+                Server.deleteServer(self, withDomain: self.serverURLField.text)
+            }
+        }
     }
 }
 
