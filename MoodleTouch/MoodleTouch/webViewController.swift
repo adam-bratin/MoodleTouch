@@ -164,4 +164,9 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
             createLoginScript()
         }
     }
+    
+    func authenticationFailed() {
+        self.webView.stopLoading()
+        self.mNavigationController.popViewControllerAnimated(true)
+    }
 }

@@ -18,13 +18,22 @@
         (__bridge id)kSecReturnData: @YES,
         (__bridge id)kSecReturnAttributes: @YES,
         (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne,
-        (__bridge id)kSecUseOperationPrompt: @"Authenticate to retrieve your password"};
+        (__bridge id)kSecUseOperationPrompt: NSLocalizedString(@"Authenticate to retrieve your password", nil)};
         CFTypeRef dataTypeRef = NULL;
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)(query), &dataTypeRef);
+        NSLog(@"Find: %d",(int)status);
         NSDictionary *results = (__bridge NSDictionary*)dataTypeRef;
-        if(self.ResultsDelegate!=nil) {
-            [self.ResultsDelegate returnKeychainResults:results];
+        if (status == noErr) {
+            if(self.ResultsDelegate!=nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.ResultsDelegate returnKeychainResults:results];
+                });
+            }
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.ResultsDelegate authenticationFailed];
+            });
         }
     });
 }
@@ -42,7 +51,6 @@
         (__bridge id)kSecAttrAccount: username,
         (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
 //        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAlwaysThisDeviceOnly,
-        (__bridge id)kSecUseNoAuthenticationUI: @YES,
         (__bridge id)kSecAttrAccessControl: (__bridge_transfer id)sacObject};
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OSStatus status =  SecItemAdd((__bridge CFDictionaryRef)query, nil);
@@ -54,7 +62,9 @@
         NSLog(@"Self: %@", self.OSSStatusDelegate);
         
         if(self.OSSStatusDelegate!=nil) {
-            [self.OSSStatusDelegate reutrnOSStatus:results];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.OSSStatusDelegate reutrnOSStatus:results];
+            });
         }
     });
 }
@@ -63,7 +73,7 @@
     NSDictionary *query = @{
         (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
         (__bridge id)kSecAttrService: domain,
-        (__bridge id)kSecUseOperationPrompt: @"Authenticate to update your password"};
+        (__bridge id)kSecUseOperationPrompt: NSLocalizedString(@"Authenticate to update your password", nil)};
     
     NSDictionary *changes = @{
         (__bridge id)kSecAttrAccount: username,
@@ -75,7 +85,9 @@
                                   @"type": @"update",
                                   @"status": [[NSNumber alloc] initWithInt:status]};
         if(self.OSSStatusDelegate!=nil) {
-            [self.OSSStatusDelegate reutrnOSStatus:results];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.OSSStatusDelegate reutrnOSStatus:results];
+            });
         }
     });
 }
@@ -91,7 +103,9 @@
                                   @"type": @"delete",
                                   @"status": [[NSNumber alloc] initWithInt:status]};
         if(self.OSSStatusDelegate!=nil) {
-            [self.OSSStatusDelegate reutrnOSStatus:results];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.OSSStatusDelegate reutrnOSStatus:results];
+            });
         }
     });
 }

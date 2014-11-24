@@ -32,9 +32,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate, OSSStatusRetur
     
     @IBAction func buttonClick(sender : AnyObject) {
         if(sender as UIButton == self.deleteButton) {
-            if(Server.deleteServer(self, withDomain: self.serverURLField.text)) {
-                self.security.deleteItemAsync(self.serverURLField.text)
-            }
+            self.security.deleteItemAsync(self.serverURLField.text)
+            
         } else {
             if(self.passwordField.text == self.confirmPasswordField.text) {
                 if(sender as UIButton == self.createButton) {
@@ -72,6 +71,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate, OSSStatusRetur
     //MARK: - Delegates and data sources
     //MARK: Delegate Functions
     
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if(textField == self.serverURLField) {
+            textField.resignFirstResponder();
+            self.usernameField.becomeFirstResponder()
+        } else if(textField == self.usernameField) {
+            textField.resignFirstResponder()
+            self.passwordField.becomeFirstResponder()
+        } else if(textField == self.passwordField) {
+            textField.resignFirstResponder()
+            self.confirmPasswordField.becomeFirstResponder()
+        } else if(textField == self.confirmPasswordField) {
+            removeFirstResponders()
+        }
+        return false
+    }
+    
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         removeFirstResponders()
     }
@@ -90,7 +105,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate, OSSStatusRetur
             var status = result["status"] as NSNumber
             if(type == "delete" && status.intValue == noErr) {
                 createAlert("success", message: "The server was deleted from save list")
-            } else if(type == "update" && status.intValue == noErr) {
+                Server.deleteServer(self, withDomain: self.serverURLField.text)
+            } else if(type == "delete") {
+                Server.deleteServer(self, withDomain: self.serverURLField.text)
+            }
+            else if(type == "update" && status.intValue == noErr) {
                 createAlert("Success", message: "You added server to saved list")
             } else if(type == "add" && status.intValue == noErr) {
                 createAlert("Success", message: "You added server to saved list")

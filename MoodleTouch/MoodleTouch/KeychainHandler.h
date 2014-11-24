@@ -28,5 +28,7 @@
 @end
 
 @protocol KeychainResultReturnDelegate <NSObject>
+@required
 -(void)returnKeychainResults:(NSDictionary*)results;
+-(void)authenticationFailed;
 @end
