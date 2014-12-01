@@ -17,4 +17,5 @@ public struct Constants {
     static let progressID = "estimatedProgress"
     static let URLID = "URL"
     static let loadingID = "loading"
+    static let cellID = "ServerTableViewCell"
 }

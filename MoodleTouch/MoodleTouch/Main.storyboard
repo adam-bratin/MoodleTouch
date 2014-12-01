@@ -289,7 +289,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
-                        <segue destination="N42-jA-ExU" kind="relationship" relationship="rootViewController" id="ijb-5J-w6s"/>
+                        <segue destination="qi0-F9-V8C" kind="relationship" relationship="rootViewController" id="hbb-ID-jIs"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ptu-aI-tXv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -377,5 +377,57 @@
             </objects>
             <point key="canvasLocation" x="967.5" y="256"/>
         </scene>
+        <!--Launch Table View Controller-->
+        <scene sceneID="Xyt-ta-S52">
+            <objects>
+                <tableViewController id="qi0-F9-V8C" customClass="LaunchTableViewController" customModule="MoodleTouch" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Yer-lN-02j">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="kf5-Ky-LFR">
+                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="qi0-F9-V8C" id="Mfp-eJ-etY"/>
+                            </connections>
+                        </searchBar>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="qi0-F9-V8C" id="YIh-og-bmF"/>
+                            <outlet property="delegate" destination="qi0-F9-V8C" id="vB7-Jz-Iy0"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="I5p-Ty-PGz">
+                        <barButtonItem key="rightBarButtonItem" image="settingsIcon.png" width="22" id="c8O-Sm-e8Q" userLabel="Settings">
+                            <connections>
+                                <action selector="buttonClick:" destination="qi0-F9-V8C" id="2F8-iL-q1g"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="mTableView" destination="Yer-lN-02j" id="nc8-Nr-mO1"/>
+                        <outlet property="searchDisplayController" destination="vpT-KL-djH" id="ATz-Ic-GmF"/>
+                        <outlet property="searchbar" destination="kf5-Ky-LFR" id="6wd-16-tgn"/>
+                        <outlet property="settingsButton" destination="c8O-Sm-e8Q" id="5xI-A1-XWD"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xqJ-E0-byy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="vpT-KL-djH">
+                    <connections>
+                        <outlet property="delegate" destination="qi0-F9-V8C" id="8A8-i2-IGG"/>
+                        <outlet property="searchBar" destination="kf5-Ky-LFR" id="SK4-0v-Bmn"/>
+                        <outlet property="searchContentsController" destination="qi0-F9-V8C" id="gXh-QZ-3bF"/>
+                        <outlet property="searchResultsDataSource" destination="qi0-F9-V8C" id="VLL-xu-cSw"/>
+                        <outlet property="searchResultsDelegate" destination="qi0-F9-V8C" id="8zC-VD-XwL"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="967.5" y="920.25"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="settingsIcon.png" width="25" height="25"/>
+    </resources>
 </document>

@@ -24,11 +24,12 @@ class MoodleNavigationController: UINavigationController {
         self.URLField.hidden = true
         self.navigationBar.addSubview(URLField)
         self.loadProgress = UIProgressView(progressViewStyle: UIProgressViewStyle.Bar)
-//        self.loadProgress.frame = CGRect(origin: CGPoint(x: 1.5 * self.navigationBar.frame.size.width/8, y: 35), size: CGSize(width: 6.5 * self.navigationBar.frame.size.width/8, height: 20))
         self.loadProgress.frame = CGRect(origin: CGPoint(x: 0, y: 35), size: CGSize(width: self.navigationBar.frame.size.width, height: 20))
         self.loadProgress.hidden = true
-//        self.loadProgress.progress = 0.5
         self.navigationBar.addSubview(loadProgress)
+//        self.addServerButton = UIButton(frame: CGRect(x: 0, y: self.navigationBar.frame.size.height/4, width: 30, height: 30))
+//        self.addServerButton.buttonType = UIButtonType.Custom
+        
         
     }
 

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06AD2E3C1A2503BC00968A89 /* ServerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD2E3B1A2503BC00968A89 /* ServerTableViewCell.swift */; };
+		06AD2E3E1A25084100968A89 /* LaunchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD2E3D1A25084100968A89 /* LaunchTableViewController.swift */; };
+		06AD2E411A2726D400968A89 /* settingsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 06AD2E3F1A2726D400968A89 /* settingsIcon.png */; };
+		06AD2E421A2726D400968A89 /* settingsIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06AD2E401A2726D400968A89 /* settingsIcon@2x.png */; };
+		06AD2E481A273DDF00968A89 /* ServerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06AD2E471A273DDF00968A89 /* ServerTableViewCell.xib */; };
 		06B8B1371A1A5C1C00E1D2C6 /* MoodleTouchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8B1361A1A5C1C00E1D2C6 /* MoodleTouchTests.swift */; };
 		06B8B1411A1A5C2D00E1D2C6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06B8B1401A1A5C2D00E1D2C6 /* LaunchScreen.xib */; };
 		06B8B1431A1A5C6600E1D2C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06B8B1421A1A5C6600E1D2C6 /* Main.storyboard */; };
@@ -45,6 +50,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		06AD2E3B1A2503BC00968A89 /* ServerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerTableViewCell.swift; sourceTree = "<group>"; };
+		06AD2E3D1A25084100968A89 /* LaunchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchTableViewController.swift; sourceTree = "<group>"; };
+		06AD2E3F1A2726D400968A89 /* settingsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsIcon.png; sourceTree = "<group>"; };
+		06AD2E401A2726D400968A89 /* settingsIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsIcon@2x.png"; sourceTree = "<group>"; };
+		06AD2E471A273DDF00968A89 /* ServerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerTableViewCell.xib; sourceTree = "<group>"; };
 		06B8B1181A1A5C1C00E1D2C6 /* MoodleTouch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodleTouch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		06B8B1301A1A5C1C00E1D2C6 /* MoodleTouchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodleTouchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		06B8B1351A1A5C1C00E1D2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +105,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06AD2E3A1A25038800968A89 /* Data Cells  */ = {
+			isa = PBXGroup;
+			children = (
+				06AD2E3B1A2503BC00968A89 /* ServerTableViewCell.swift */,
+				06AD2E471A273DDF00968A89 /* ServerTableViewCell.xib */,
+			);
+			name = "Data Cells ";
+			sourceTree = "<group>";
+		};
 		06B8B10F1A1A5C1B00E1D2C6 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +135,7 @@
 		06B8B11A1A1A5C1C00E1D2C6 /* MoodleTouch */ = {
 			isa = PBXGroup;
 			children = (
+				06AD2E3A1A25038800968A89 /* Data Cells  */,
 				06B8B1621A1A5D5900E1D2C6 /* Authentication */,
 				06B8B1731A1A5DEC00E1D2C6 /* Data Models */,
 				06B8B1661A1A5D8E00E1D2C6 /* ViewControllers */,
@@ -171,6 +191,8 @@
 				06B8B1511A1A5C9100E1D2C6 /* Icon-Small@2x.png */,
 				06B8B1521A1A5C9100E1D2C6 /* Icon-Small@3x.png */,
 				06B8B15D1A1A5C9800E1D2C6 /* iTunesArtwork@2x.png */,
+				06AD2E3F1A2726D400968A89 /* settingsIcon.png */,
+				06AD2E401A2726D400968A89 /* settingsIcon@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -188,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				06B8B1671A1A5DAF00E1D2C6 /* LaunchViewController.swift */,
+				06AD2E3D1A25084100968A89 /* LaunchTableViewController.swift */,
 				06B8B1681A1A5DAF00E1D2C6 /* LoginViewController.swift */,
 				06B8B1691A1A5DAF00E1D2C6 /* MoodleNavigationController.swift */,
 				06B8B16A1A1A5DAF00E1D2C6 /* webViewController.swift */,
@@ -256,6 +279,7 @@
 					};
 					06B8B12F1A1A5C1C00E1D2C6 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 23D2Q2D933;
 						TestTargetID = 06B8B1171A1A5C1C00E1D2C6;
 					};
 				};
@@ -292,11 +316,14 @@
 				06B8B1571A1A5C9100E1D2C6 /* Icon-Small-40.png in Resources */,
 				06B8B15B1A1A5C9100E1D2C6 /* Icon-Small@2x.png in Resources */,
 				06B8B1551A1A5C9100E1D2C6 /* Icon-76.png in Resources */,
+				06AD2E421A2726D400968A89 /* settingsIcon@2x.png in Resources */,
 				06B8B1451A1A5C7100E1D2C6 /* Images.xcassets in Resources */,
 				06B8B1411A1A5C2D00E1D2C6 /* LaunchScreen.xib in Resources */,
 				06B8B15A1A1A5C9100E1D2C6 /* Icon-Small.png in Resources */,
 				06B8B1591A1A5C9100E1D2C6 /* Icon-Small-40@3x.png in Resources */,
 				06B8B1561A1A5C9100E1D2C6 /* Icon-76@2x.png in Resources */,
+				06AD2E481A273DDF00968A89 /* ServerTableViewCell.xib in Resources */,
+				06AD2E411A2726D400968A89 /* settingsIcon.png in Resources */,
 				06B8B15C1A1A5C9100E1D2C6 /* Icon-Small@3x.png in Resources */,
 				06B8B1431A1A5C6600E1D2C6 /* Main.storyboard in Resources */,
 			);
@@ -316,11 +343,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06AD2E3C1A2503BC00968A89 /* ServerTableViewCell.swift in Sources */,
 				06B8B16D1A1A5DAF00E1D2C6 /* MoodleNavigationController.swift in Sources */,
 				06B8B16C1A1A5DAF00E1D2C6 /* LoginViewController.swift in Sources */,
 				06B8B1611A1A5D4900E1D2C6 /* Moodle.xcdatamodeld in Sources */,
 				06B8B16B1A1A5DAF00E1D2C6 /* LaunchViewController.swift in Sources */,
 				06B8B1711A1A5DCE00E1D2C6 /* AppDelegate.swift in Sources */,
+				06AD2E3E1A25084100968A89 /* LaunchTableViewController.swift in Sources */,
 				06DAE8B91A1DD3CA00373478 /* KeychainHandler.m in Sources */,
 				06B8B16E1A1A5DAF00E1D2C6 /* webViewController.swift in Sources */,
 				06B8B1751A1A5E0C00E1D2C6 /* Server.swift in Sources */,
@@ -381,9 +410,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "558d8148-9505-4816-92aa-d6800188e7c7";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -417,8 +447,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "95e7fa3b-8061-4630-9d9f-43e7ffc316c7";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -433,6 +464,7 @@
 				INFOPLIST_FILE = MoodleTouch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "558d8148-9505-4816-92aa-d6800188e7c7";
 				SWIFT_OBJC_BRIDGING_HEADER = "MoodleTouch/MoodleTouch-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -443,11 +475,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				ENABLE_NS_ASSERTIONS = YES;
 				INFOPLIST_FILE = MoodleTouch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "95e7fa3b-8061-4630-9d9f-43e7ffc316c7";
 				SWIFT_OBJC_BRIDGING_HEADER = "MoodleTouch/MoodleTouch-Bridging-Header.h";
 			};
 			name = Release;
@@ -456,6 +489,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -467,6 +502,7 @@
 				INFOPLIST_FILE = MoodleTouchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoodleTouch.app/MoodleTouch";
 			};
 			name = Debug;
@@ -475,6 +511,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -482,6 +520,7 @@
 				INFOPLIST_FILE = MoodleTouchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoodleTouch.app/MoodleTouch";
 			};
 			name = Release;
