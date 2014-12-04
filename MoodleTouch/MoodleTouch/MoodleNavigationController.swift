@@ -27,10 +27,6 @@ class MoodleNavigationController: UINavigationController {
         self.loadProgress.frame = CGRect(origin: CGPoint(x: 0, y: 35), size: CGSize(width: self.navigationBar.frame.size.width, height: 20))
         self.loadProgress.hidden = true
         self.navigationBar.addSubview(loadProgress)
-//        self.addServerButton = UIButton(frame: CGRect(x: 0, y: self.navigationBar.frame.size.height/4, width: 30, height: 30))
-//        self.addServerButton.buttonType = UIButtonType.Custom
-        
-        
     }
 
 }

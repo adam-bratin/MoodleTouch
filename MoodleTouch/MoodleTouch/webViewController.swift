@@ -56,6 +56,7 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
         self.webView.removeObserver(self, forKeyPath:Constants.progressID)
         self.webView.removeObserver(self, forKeyPath:Constants.URLID)
         self.webView.removeObserver(self, forKeyPath:Constants.loadingID)
+        self.mNavigationController.URLField.enabled = false
         self.mNavigationController.URLField.hidden = true
         self.mNavigationController.loadProgress.hidden = true
     }
@@ -91,6 +92,7 @@ class webViewController: UIViewController, WKNavigationDelegate, UIAlertViewDele
         self.webView.addObserver(self, forKeyPath: Constants.loadingID, options: NSKeyValueObservingOptions.New, context: nil)
         self.mNavigationController.URLField.hidden = false
         self.mNavigationController.loadProgress.hidden = false
+        self.mNavigationController.URLField.enabled = true
         self.mNavigationController.URLField.returnKeyType = UIReturnKeyType.Go
         self.mNavigationController.URLField.delegate = self
         self.view.addSubview(self.webView)

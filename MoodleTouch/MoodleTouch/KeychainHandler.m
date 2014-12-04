@@ -39,33 +39,41 @@
 }
 
 -(void)addItemAsync:(NSString*)domain withUsername:(NSString*)username andPassword:(NSString*)password {
+    
+    NSDictionary *query = @{
+                            (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+                            (__bridge id)kSecAttrService: domain};
+    
     CFErrorRef error = NULL;
     SecAccessControlRef sacObject;
     //kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
     sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                 kSecAttrAccessibleWhenUnlocked,
                                                 kSecAccessControlUserPresence, &error);
-    NSDictionary *query = @{
-        (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-        (__bridge id)kSecAttrService: domain,
-        (__bridge id)kSecAttrAccount: username,
-        (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
-//        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAlwaysThisDeviceOnly,
-        (__bridge id)kSecAttrAccessControl: (__bridge_transfer id)sacObject};
+    NSDictionary *query2 = @{
+                            (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+                            (__bridge id)kSecAttrService: domain,
+                            (__bridge id)kSecAttrAccount: username,
+                            (__bridge id)kSecValueData: [password dataUsingEncoding:NSUTF8StringEncoding],
+                            //        (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAlwaysThisDeviceOnly,
+                            (__bridge id)kSecAttrAccessControl: (__bridge_transfer id)sacObject};
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        OSStatus status =  SecItemAdd((__bridge CFDictionaryRef)query, nil);
-        NSLog(@"Add: %d",(int)status);
-        NSDictionary *results = @{
-            @"type": @"add",
-            @"status": [[NSNumber alloc] initWithInt:status]};
-        NSLog(@"Results: %@", results);
-        NSLog(@"Self: %@", self.OSSStatusDelegate);
-        
-        if(self.OSSStatusDelegate!=nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.OSSStatusDelegate reutrnOSStatus:results];
-            });
-        }
+        OSStatus status =  SecItemDelete((__bridge CFDictionaryRef)query);
+//        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            OSStatus status2 =  SecItemAdd((__bridge CFDictionaryRef)query2, nil);
+            NSLog(@"Add: %d",(int)status2);
+            NSDictionary *results = @{
+                                      @"type": @"add",
+                                      @"status": [[NSNumber alloc] initWithInt:status2]};
+            NSLog(@"Results: %@", results);
+            NSLog(@"Self: %@", self.OSSStatusDelegate);
+            
+            if(self.OSSStatusDelegate!=nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.OSSStatusDelegate reutrnOSStatus:results];
+                });
+            }
+//        });
     });
 }
 
